@@ -1,0 +1,12 @@
+[demo]
+output = json
+region = us-east-1
+[profile demo]
+output = json
+region = ap-southeast-1
+[profile kops]
+output = json
+region = ap-southeast-1
+[profile personal]
+output = text
+region = ap-southeast-1
