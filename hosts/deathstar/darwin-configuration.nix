@@ -224,7 +224,6 @@
 
     brews = [
       "adr-tools"
-      "bazel"
       "bzt"
       "fontconfig"
       "gemini-cli"
@@ -232,12 +231,10 @@
       "jpeg"
       "markdown"
       "mole"
-      "planck"
       "tailscale"
       "terminal-notifier"
       "the_silver_searcher"
       "tree"
-      "winetricks"
       "zsh-autosuggestions"
       "zsh-completions"
     ];

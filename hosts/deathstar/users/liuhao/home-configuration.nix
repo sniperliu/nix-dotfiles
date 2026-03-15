@@ -40,6 +40,8 @@
     awscli2
     google-cloud-sdk
     terraform
+    orbstack
+    utm
 
     # Build tools
     autoconf
@@ -56,7 +58,6 @@
     go
     rustup
     nodejs
-    ruby
     ocaml
     opam
 
@@ -159,10 +160,6 @@
         export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
         zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
         source <(carapace _carapace)
-
-        # SDKMAN — managed via homebrew, outside of nix
-        export SDKMAN_DIR="$HOME/.sdkman"
-        [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
         # Vulkan SDK — installed manually
         export VULKAN_SDK="$HOME/VulkanSDK/1.4.335.1/macOS"
@@ -325,4 +322,7 @@
     };
     nix.enable = true;
   };
+
+  # ── Java ───────────────────────────────────────────────────────────────────────
+  programs.java.enable = true;
 }
