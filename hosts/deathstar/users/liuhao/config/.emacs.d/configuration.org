@@ -456,7 +456,8 @@ Customizations for easier navigation between files and buffers
    (use-package magit
      :bind ("C-x g" . magit-status)
      :custom
-     (magit-git-executable "git"))
+     (magit-git-executable "git")
+     (with-editor-emacsclient-executable "emacsclient"))
 
    (use-package forge
      :disabled)
@@ -899,7 +900,7 @@ Customizations for easier navigation between files and buffers
       ;; :after hydra
       :config
       ;; Install what need to be installed !
-      (pdf-tools-install t t t)
+      (pdf-loader-install)
       ;; open pdfs scaled to fit page
       (setq-default pdf-view-display-size 'fit-page)
       ;; automatically annotate highlights

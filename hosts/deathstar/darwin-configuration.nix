@@ -247,7 +247,6 @@
       "claude"
       "claude-code"
       "dropbox"
-      "emacs-app"
       "evernote"
       "firefox"
       "font-fira-code"

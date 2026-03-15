@@ -301,9 +301,17 @@
 
   # ── Emacs ─────────────────────────────────────────────────────────────────────
 
-  home.file.".emacs.d/init.el".source = ./config/.emacs.d/init.el;
+  programs.emacs = {
+    enable = true;
+    extraPackages = epkgs: [
+      epkgs.pdf-tools
+    ];
+  };
 
-  home.file.".emacs.d/configuration.org".source = ./config/.emacs.d/configuration.org;
+  home.file = {
+    ".emacs.d/init.el".source           = ./config/.emacs.d/init.el;
+    ".emacs.d/configuration.org".source = ./config/.emacs.d/configuration.org;
+  };
 
   # ── AWS ───────────────────────────────────────────────────────────────────────
 
