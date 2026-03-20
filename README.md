@@ -16,4 +16,7 @@ $sudo darwin-rebuild switch --generation 24
 
 ;; Cleanup
 sudo nix-collect-garbage -d
+
+;; apple store
+$ mas search App
 ```

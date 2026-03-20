@@ -230,13 +230,12 @@
       "rlwrap"
       "jpeg"
       "markdown"
+      "mas"
       "mole"
       "tailscale"
       "terminal-notifier"
       "the_silver_searcher"
       "tree"
-      "zsh-autosuggestions"
-      "zsh-completions"
     ];
 
     casks = [
@@ -253,6 +252,7 @@
       "font-hack-nerd-font"
       "gimp"
       "google-chrome"
+      "hiddenbar"
       "jd-gui"
       "obsidian"
       "mactex"
@@ -266,6 +266,13 @@
       "visual-studio-code"
       "wireshark-app"
     ];
+
+    # These are the Mac App Store apps you want to install.
+    # The format is "App Name" = <App ID Number>;
+    masApps = {
+      "Kindle" = 302584613;
+      "Haskell" = 841285201;
+    };
   };
 
   # ── System state version ──────────────────────────────────────────────────────

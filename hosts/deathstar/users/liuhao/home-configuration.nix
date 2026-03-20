@@ -8,8 +8,10 @@
 
   home.packages = with pkgs; [
     # Shell utilities
+    antigen
     coreutils
     curl
+    ghostty-bin
     wget
     eza
     bat
@@ -19,9 +21,10 @@
     mtr
     nmap
     mosh
+    tmux
     zoxide
-    ghostty-bin
-    antigen
+    zsh-completions
+    zsh-autosuggestions
 
     # Git & signing
     git-lfs
@@ -35,6 +38,7 @@
     poppler
     qpdf
     yq-go
+    pandoc
 
     # Cloud & infrastructure
     awscli2
@@ -70,6 +74,11 @@
 
     # Search
 
+    # Image
+    ffmpeg
+    imagemagick
+    yt-dlp
+
     # Misc
     exercism
     starship
@@ -84,6 +93,7 @@
   # ── PATH & environment ────────────────────────────────────────────────────────
 
   home.sessionPath = [
+    "$HOME/.nix-profile/bin"
     "$HOME/.local/bin"
     "$HOME/go/bin"
     "/run/current-system/sw/bin"
