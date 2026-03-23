@@ -1,7 +1,11 @@
 { config, pkgs, lib, ... }:
+let
+  username = "liuhao";
+  homeDir  = "/Users/${username}";
+in
 {
-  home.username      = "liuhao";
-  home.homeDirectory = lib.mkForce "/Users/liuhao";
+  home.username      = username;
+  home.homeDirectory = lib.mkForce homeDir;
   home.stateVersion  = "24.11";
 
   # ── Packages ──────────────────────────────────────────────────────────────────
