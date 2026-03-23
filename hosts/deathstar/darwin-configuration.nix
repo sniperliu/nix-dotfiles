@@ -1,9 +1,13 @@
 { pkgs, lib, hostName, ... }:
+let
+  username = "liuhao";
+  homeDir  = "/Users/${username}";
+in
 {
   nixpkgs.hostPlatform    = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
 
-  system.primaryUser = "liuhao";
+  system.primaryUser = username;
 
   home-manager.useGlobalPkgs   = true;
   home-manager.useUserPackages = true;
@@ -15,7 +19,7 @@
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
-    trusted-users         = [ "@admin" "liuhao" ];
+    trusted-users         = [ "@admin" username ];
     auto-optimise-store   = true;
     experimental-features = [ "nix-command" "flakes" ];
     extra-platforms       = lib.optionals (pkgs.stdenv.hostPlatform.system == "aarch64-darwin")
@@ -175,7 +179,7 @@
   # ── Activation scripts ────────────────────────────────────────────────────────
 
   system.activationScripts.postActivation.text = ''
-    USER_HOME="/Users/liuhao"
+    USER_HOME="${homeDir}"
     mkdir -p "$USER_HOME/Desktop/Screenshots"
     /usr/bin/chflags nohidden "$USER_HOME/Library"
 
