@@ -237,7 +237,6 @@ in
       "mas"
       "mole"
       "tailscale"
-      "terminal-notifier"
       "the_silver_searcher"
       "tree"
     ];
@@ -252,8 +251,6 @@ in
       "dropbox"
       "evernote"
       "firefox"
-      "font-fira-code"
-      "font-hack-nerd-font"
       "gimp"
       "google-chrome"
       "hiddenbar"
