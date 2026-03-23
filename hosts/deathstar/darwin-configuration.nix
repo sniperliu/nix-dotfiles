@@ -183,27 +183,32 @@ in
     mkdir -p "$USER_HOME/Desktop/Screenshots"
     /usr/bin/chflags nohidden "$USER_HOME/Library"
 
+    # PlistBuddy is required here because nix-darwin's system.defaults only
+    # supports flat key-value pairs and cannot express nested IconViewSettings
+    # keys inside DesktopViewSettings / FK_StandardViewSettings / StandardViewSettings.
     FINDER_PLIST="$USER_HOME/Library/Preferences/com.apple.finder.plist"
-    for view in DesktopViewSettings FK_StandardViewSettings StandardViewSettings; do
+    if [ -f "$FINDER_PLIST" ]; then
+      for view in DesktopViewSettings FK_StandardViewSettings StandardViewSettings; do
+        /usr/libexec/PlistBuddy -c \
+          "Set :''${view}:IconViewSettings:showItemInfo true"      "$FINDER_PLIST" 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c \
+          "Add :''${view}:IconViewSettings:showItemInfo bool true"  "$FINDER_PLIST"
+        /usr/libexec/PlistBuddy -c \
+          "Set :''${view}:IconViewSettings:arrangeBy grid"         "$FINDER_PLIST" 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c \
+          "Add :''${view}:IconViewSettings:arrangeBy string grid"  "$FINDER_PLIST"
+        /usr/libexec/PlistBuddy -c \
+          "Set :''${view}:IconViewSettings:gridSpacing 100"        "$FINDER_PLIST" 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c \
+          "Add :''${view}:IconViewSettings:gridSpacing integer 100" "$FINDER_PLIST"
+        /usr/libexec/PlistBuddy -c \
+          "Set :''${view}:IconViewSettings:iconSize 80"            "$FINDER_PLIST" 2>/dev/null || \
+        /usr/libexec/PlistBuddy -c \
+          "Add :''${view}:IconViewSettings:iconSize integer 80"    "$FINDER_PLIST"
+      done
       /usr/libexec/PlistBuddy -c \
-        "Set :''${view}:IconViewSettings:showItemInfo true"      "$FINDER_PLIST" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c \
-        "Add :''${view}:IconViewSettings:showItemInfo bool true"  "$FINDER_PLIST"
-      /usr/libexec/PlistBuddy -c \
-        "Set :''${view}:IconViewSettings:arrangeBy grid"         "$FINDER_PLIST" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c \
-        "Add :''${view}:IconViewSettings:arrangeBy string grid"  "$FINDER_PLIST"
-      /usr/libexec/PlistBuddy -c \
-        "Set :''${view}:IconViewSettings:gridSpacing 100"        "$FINDER_PLIST" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c \
-        "Add :''${view}:IconViewSettings:gridSpacing integer 100" "$FINDER_PLIST"
-      /usr/libexec/PlistBuddy -c \
-        "Set :''${view}:IconViewSettings:iconSize 80"            "$FINDER_PLIST" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c \
-        "Add :''${view}:IconViewSettings:iconSize integer 80"    "$FINDER_PLIST"
-    done
-    /usr/libexec/PlistBuddy -c \
-      "Set :DesktopViewSettings:IconViewSettings:labelOnBottom false" "$FINDER_PLIST" 2>/dev/null || true
+        "Set :DesktopViewSettings:IconViewSettings:labelOnBottom false" "$FINDER_PLIST" 2>/dev/null || true
+    fi
 
     for app in cfprefsd Dock Finder; do
       /usr/bin/killall "$app" &>/dev/null || true
