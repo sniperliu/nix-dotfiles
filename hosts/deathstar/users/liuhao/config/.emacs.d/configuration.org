@@ -400,7 +400,10 @@ Customizations for easier navigation between files and buffers
                    ("C-c p" . projectile-command-map))
      :config
      (projectile-mode +1)
-     (setq projectile-enable-caching t))
+     (setq projectile-enable-caching t)
+     (when (executable-find "rg")
+       (setq projectile-indexing-method 'alien
+             projectile-generic-command "rg --files --hidden --follow --glob '!.git'")))
 
    ;; (use-package helm
    ;;   :init
@@ -421,6 +424,8 @@ Customizations for easier navigation between files and buffers
 
    ;; removed from melpa
    ;; (use-package helm-ag)
+
+   (use-package ripgrep)
  #+end_src
 ** Consult
 #+begin_src emacs-lisp
