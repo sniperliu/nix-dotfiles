@@ -8,6 +8,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 FLAKE="$ROOT"
 HOSTNAME="${HOSTNAME:-deathstar}"
+REBUILD_CMD=(darwin-rebuild switch --flake "$FLAKE#$HOSTNAME")
 
 # ── 1. Xcode Command Line Tools ───────────────────────────────────────────────
 if ! xcode-select -p &>/dev/null; then
@@ -30,10 +31,10 @@ fi
 # ── 3. nix-darwin ─────────────────────────────────────────────────────────────
 if ! command -v darwin-rebuild &>/dev/null; then
     echo "Bootstrapping nix-darwin..."
-    nix run nix-darwin -- switch --flake "$FLAKE#$HOSTNAME"
-else
-    echo "Applying nix-darwin configuration..."
-    darwin-rebuild switch --flake "$FLAKE#$HOSTNAME"
+    nix run "$FLAKE#darwinConfigurations.${HOSTNAME}.pkgs.darwin-rebuild" -- switch --flake "$FLAKE#$HOSTNAME"
 fi
+
+echo "Applying nix-darwin configuration..."
+sudo "${REBUILD_CMD[@]}"
 
 echo "Done! Open a new shell to pick up the environment."

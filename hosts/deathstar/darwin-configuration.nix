@@ -6,6 +6,7 @@ in
 {
   nixpkgs.hostPlatform    = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.android_sdk.accept_license = true;
 
   system.primaryUser = username;
 
@@ -219,10 +220,11 @@ in
 
   homebrew = {
     enable = true;
+    # Keep Homebrew focused on GUI apps and formulae that are awkward in nixpkgs.
     onActivation = {
       autoUpdate = true;
       upgrade    = true;
-      cleanup    = "zap";
+      cleanup    = "uninstall";
     };
 
     taps = [
@@ -233,20 +235,18 @@ in
 
     brews = [
       "adr-tools"
+      "ios-deploy"
       "bzt"
       "fontconfig"
       "gemini-cli"
-      "rlwrap"
       "jpeg"
       "markdown"
       "mas"
       "mole"
-      "tailscale"
-      "the_silver_searcher"
-      "tree"
     ];
 
     casks = [
+      "android-studio"
       "anki"
       "blender"
       "codex"

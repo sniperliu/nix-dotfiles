@@ -22,10 +22,15 @@ in
     fd
     ripgrep
     carapace
+    lazygit
     mtr
     nmap
     mosh
+    rlwrap
     tmux
+    silver-searcher
+    tailscale
+    tree
     zoxide
     zsh-completions
     zsh-autosuggestions
@@ -59,6 +64,8 @@ in
     maven
     gradle
     sbt
+    openssl
+    readline
 
     # Languages
     clojure
@@ -94,6 +101,12 @@ in
   ] ++ lib.optionals pkgs.stdenv.isDarwin [
     m-cli
     cocoapods
+
+    # iOS development (Xcode itself must be installed via App Store or xcodes)
+    xcodes          # Xcode version manager
+    xcodegen        # Generate Xcode projects from YAML spec
+    swiftlint       # Swift style linter
+
   ];
 
   # ── PATH & environment ────────────────────────────────────────────────────────
@@ -103,16 +116,13 @@ in
     "$HOME/.local/bin"
     "$HOME/go/bin"
     "/run/current-system/sw/bin"
-    "/opt/homebrew/sbin"
     "/opt/homebrew/bin"
-    "/usr/local/sbin"
-    "/usr/local/opt/make/libexec/gnubin"
   ];
 
   home.sessionVariables = {
-    LDFLAGS  = "-L/opt/homebrew/lib";
-    CPPFLAGS = "-I/opt/homebrew/include";
-    EDITOR   = "emacsclient";
+    EDITOR           = "emacsclient";
+    LDFLAGS          = "-L${homeDir}/.nix-profile/lib";
+    CPPFLAGS         = "-I${homeDir}/.nix-profile/include";
   };
 
   # ── Git ───────────────────────────────────────────────────────────────────────
@@ -216,6 +226,15 @@ in
   programs.direnv = {
     enable            = true;
     nix-direnv.enable = true;
+    # TODO: remove once nixpkgs-unstable fixes direnv 2.37.1 build
+    # (upstream passes -linkmode=external without CGO enabled)
+    package = pkgs.direnv.overrideAttrs (old: {
+      buildPhase = ''
+        runHook preBuild
+        go build -ldflags "-X main.bashPath=${pkgs.bash}/bin/bash" -o direnv
+        runHook postBuild
+      '';
+    });
   };
 
   # ── htop ──────────────────────────────────────────────────────────────────────
