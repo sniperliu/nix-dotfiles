@@ -226,15 +226,6 @@ in
   programs.direnv = {
     enable            = true;
     nix-direnv.enable = true;
-    # TODO: remove once nixpkgs-unstable fixes direnv 2.37.1 build
-    # (upstream passes -linkmode=external without CGO enabled)
-    package = pkgs.direnv.overrideAttrs (old: {
-      buildPhase = ''
-        runHook preBuild
-        go build -ldflags "-X main.bashPath=${pkgs.bash}/bin/bash" -o direnv
-        runHook postBuild
-      '';
-    });
   };
 
   # ── htop ──────────────────────────────────────────────────────────────────────
