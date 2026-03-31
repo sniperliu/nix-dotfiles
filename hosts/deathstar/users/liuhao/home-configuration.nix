@@ -27,9 +27,9 @@ in
     nmap
     mosh
     rlwrap
-    tmux
     silver-searcher
     tailscale
+    tldr
     tree
     zoxide
     zsh-completions
@@ -350,6 +350,98 @@ in
       };
     };
     nix.enable = true;
+  };
+
+  # ── tmux ──────────────────────────────────────────────────────────────────────
+
+  programs.tmux = {
+    enable        = true;
+    prefix        = "C-a";
+    baseIndex     = 1;
+    escapeTime    = 0;
+    historyLimit  = 50000;
+    mouse         = true;
+    keyMode       = "emacs";
+    terminal      = "tmux-256color";
+    sensibleOnTop = true;
+
+    plugins = with pkgs.tmuxPlugins; [
+      {
+        plugin = resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+        '';
+      }
+      {
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '10'
+        '';
+      }
+      {
+        plugin = catppuccin;
+        extraConfig = ''
+          set -g @catppuccin_flavour 'mocha'
+          set -g @catppuccin_window_status_style "rounded"
+          set -g @catppuccin_status_modules_right "session date_time"
+        '';
+      }
+      yank
+    ];
+
+    extraConfig = ''
+      # ── True colour ──────────────────────────────────────────────────────────
+      set -as terminal-features ",xterm-256color:RGB"
+
+      # ── Window / pane numbering ──────────────────────────────────────────────
+      set  -g renumber-windows on
+      setw -g pane-base-index  1
+
+      # ── Splits (stay in current directory) ──────────────────────────────────
+      bind | split-window -hc "#{pane_current_path}"
+      bind - split-window -vc "#{pane_current_path}"
+      bind c new-window        -c "#{pane_current_path}"
+      unbind '"'
+      unbind %
+
+      # ── Window / session switching ───────────────────────────────────────────
+      bind Space   last-window
+      bind C-Space switch-client -l
+
+      # ── Window swapping ──────────────────────────────────────────────────────
+      bind -r "<" swap-window -d -t -1
+      bind -r ">" swap-window -d -t +1
+
+      # ── Marked pane jump ─────────────────────────────────────────────────────
+      bind \` switch-client -t'{marked}'
+
+      # ── Pane navigation (arrow keys) ─────────────────────────────────────────
+      bind Up    select-pane -U
+      bind Down  select-pane -D
+      bind Left  select-pane -L
+      bind Right select-pane -R
+
+      # ── Pane resizing ────────────────────────────────────────────────────────
+      bind -r M-Up    resize-pane -U 5
+      bind -r M-Down  resize-pane -D 5
+      bind -r M-Left  resize-pane -L 5
+      bind -r M-Right resize-pane -R 5
+
+      # ── Copy mode (emacs) ────────────────────────────────────────────────────
+      bind Enter copy-mode
+      bind -T copy-mode C-space send -X begin-selection
+      bind -T copy-mode M-w    send -X copy-pipe-and-cancel "pbcopy"
+      bind -T copy-mode C-w    send -X copy-pipe-and-cancel "pbcopy"
+      bind -T copy-mode C-g    send -X cancel
+
+      # ── Reload config ────────────────────────────────────────────────────────
+      bind r source-file ~/.config/tmux/tmux.conf \; display "Reloaded!"
+
+      # ── Activity monitoring ──────────────────────────────────────────────────
+      setw -g monitor-activity on
+      set  -g visual-activity  off
+    '';
   };
 
   # ── Java ───────────────────────────────────────────────────────────────────────
