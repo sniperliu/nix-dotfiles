@@ -79,7 +79,7 @@ in
     polylith
 
     # JS/TS
-    nodePackages.typescript
+    typescript
 
     # Nix tooling
     cachix
@@ -94,6 +94,7 @@ in
 
     # Misc
     exercism
+    ollama
     starship
 
     # Personal
