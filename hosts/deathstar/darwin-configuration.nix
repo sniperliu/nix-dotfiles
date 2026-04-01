@@ -259,6 +259,7 @@ in
       "gimp"
       "google-chrome"
       "hiddenbar"
+      "trader-workstation"
       "jd-gui"
       "obsidian"
       "mactex"
