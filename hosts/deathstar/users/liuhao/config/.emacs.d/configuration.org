@@ -1543,6 +1543,14 @@ Customizations for easier navigation between files and buffers
                 ("C-c t p" . go-test-current-project)
                 ("C-c t c" . go-test-current-coverage)))
 #+end_src
+** Zig
+#+begin_src emacs-lisp
+  (use-package zig-mode
+    :mode "\\.zig\\'"
+    :hook (zig-mode . lsp-deferred)
+    :config
+    (setq zig-format-on-save t))
+#+end_src
 * Finance
 #+begin_src emacs-lisp
   (use-package beancount
