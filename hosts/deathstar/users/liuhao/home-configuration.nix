@@ -330,10 +330,19 @@ in
     ];
   };
 
-  home.file = {
-    ".emacs.d/init.el".source           = ./config/.emacs.d/init.el;
-    ".emacs.d/configuration.org".source = ./config/.emacs.d/configuration.org;
-  };
+  # configuration.org is read-only (fine, Emacs only reads it)
+  xdg.configFile."emacs/configuration.org".source =
+    ./config/.emacs.d/configuration.org;
+
+  # init.el needs to be writable (Emacs appends custom-set-* to it).
+  # home.activation creates a direct symlink to the dotfiles source,
+  # bypassing the nix store so Emacs can save through it.
+  home.activation.emacsInit = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD mkdir -p "${config.xdg.configHome}/emacs"
+    $DRY_RUN_CMD ln -sf \
+      "${homeDir}/nix-dotfiles/hosts/deathstar/users/liuhao/config/.emacs.d/init.el" \
+      "${config.xdg.configHome}/emacs/init.el"
+  '';
 
   # ── AWS ───────────────────────────────────────────────────────────────────────
 
