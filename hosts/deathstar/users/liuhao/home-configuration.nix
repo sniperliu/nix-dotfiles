@@ -48,7 +48,6 @@ in
     qpdf
     yq-go
     pandoc
-    bun
 
     # Cloud & infrastructure
     awscli2
@@ -61,25 +60,8 @@ in
     autoconf
     automake
     gcc
-    maven
-    gradle
-    sbt
     openssl
     readline
-
-    # Languages
-    clojure
-    leiningen
-    elixir
-    go
-    rustup
-    nodejs
-    ocaml
-    opam
-    polylith
-
-    # JS/TS
-    typescript
 
     # Nix tooling
     cachix
@@ -327,6 +309,8 @@ in
     enable = true;
     extraPackages = epkgs: [
       epkgs.pdf-tools
+      epkgs.vterm
+      epkgs.envrc
     ];
   };
 
@@ -334,14 +318,15 @@ in
   xdg.configFile."emacs/configuration.org".source =
     ./config/.emacs.d/configuration.org;
 
-  # init.el needs to be writable (Emacs appends custom-set-* to it).
-  # home.activation creates a direct symlink to the dotfiles source,
-  # bypassing the nix store so Emacs can save through it.
-  home.activation.emacsInit = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  # init.el is managed declaratively; Emacs writes user customizations to
+  # custom.el instead so the config stays portable across checkout locations.
+  xdg.configFile."emacs/init.el".source = ./config/.emacs.d/init.el;
+
+  home.activation.emacsCustomFile = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     $DRY_RUN_CMD mkdir -p "${config.xdg.configHome}/emacs"
-    $DRY_RUN_CMD ln -sf \
-      "${homeDir}/nix-dotfiles/hosts/deathstar/users/liuhao/config/.emacs.d/init.el" \
-      "${config.xdg.configHome}/emacs/init.el"
+    if [ ! -e "${config.xdg.configHome}/emacs/custom.el" ]; then
+      $DRY_RUN_CMD touch "${config.xdg.configHome}/emacs/custom.el"
+    fi
   '';
 
   # ── AWS ───────────────────────────────────────────────────────────────────────
@@ -454,6 +439,4 @@ in
     '';
   };
 
-  # ── Java ───────────────────────────────────────────────────────────────────────
-  programs.java.enable = true;
 }
