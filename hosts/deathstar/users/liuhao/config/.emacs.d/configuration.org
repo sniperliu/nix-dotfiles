@@ -246,6 +246,7 @@ Load Emacs UI customizations. Here we set up a color theme, enable/disable diffe
 ** Startup
  #+begin_src emacs-lisp
  (setq inhibit-startup-screen t)
+ (setq initial-scratch-message nil)
  ;; maximaze the frame when startup
  (add-to-list 'default-frame-alist '(fullscreen . maximized))
  #+end_src
