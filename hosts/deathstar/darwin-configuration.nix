@@ -7,6 +7,13 @@ in
   nixpkgs.hostPlatform    = "aarch64-darwin";
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.android_sdk.accept_license = true;
+  # nixpkgs.overlays = [
+  #   (_final: prev: {
+  #     direnv = prev.direnv.overrideAttrs (_: {
+  #       doCheck = false;
+  #     });
+  #   })
+  # ];
 
   system.primaryUser = username;
 
@@ -250,6 +257,7 @@ in
       "anki"
       "blender"
       "codex"
+      "codex-app"
       "chatgpt"
       "claude"
       "claude-code"
@@ -279,6 +287,18 @@ in
     masApps = {
       "Kindle" = 302584613;
       "Haskell" = 841285201;
+    };
+  };
+
+  # ── Ollama ────────────────────────────────────────────────────────────────────
+
+  launchd.user.agents.ollama = {
+    serviceConfig = {
+      ProgramArguments  = [ "${pkgs.ollama}/bin/ollama" "serve" ];
+      KeepAlive         = true;
+      RunAtLoad         = true;
+      StandardOutPath   = "/tmp/ollama.log";
+      StandardErrorPath = "/tmp/ollama.log";
     };
   };
 

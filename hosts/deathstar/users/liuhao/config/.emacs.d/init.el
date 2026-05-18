@@ -11,6 +11,9 @@
 (org-babel-load-file (expand-file-name "configuration.org"
                                        user-emacs-directory))
 
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror 'nomessage)
+
 (add-hook 'emacs-startup-hook
   (lambda ()
     (setq gc-cons-threshold 300000000 ; 300mb
@@ -31,10 +34,10 @@
  '(package-selected-packages
    '(ag ai-code beacon beancount cargo clay clj-refactor clojure-snippets
         company corfu counsel dockerfile-mode edts elfeed
-        embark-consult exec-path-from-shell expand-region fic-mode
-        fill-column-indicator flx flycheck-joker flycheck-rust
-        git-gutter go-mode gotest gradle-mode helm-bibtex
-        helm-descbinds helm-lsp helm-projectile htmlize
+        embark-consult envrc exec-path-from-shell expand-region
+        fic-mode fill-column-indicator flx flycheck-joker
+        flycheck-rust git-gutter go-mode gotest gradle-mode
+        helm-bibtex helm-descbinds helm-lsp helm-projectile htmlize
         ido-vertical-mode inf-clojure lsp-ivy lsp-java lsp-ui magit
         marginalia markdown-preview-mode nix-mode orderless
         org-bullets org-contrib org-noter org-roam ox-reveal pdf-tools
@@ -48,4 +51,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-

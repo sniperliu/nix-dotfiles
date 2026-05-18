@@ -1,6 +1,13 @@
 #+title: Emacs Configuration
 
 * System
+** UI
+ #+begin_src emacs-lisp
+   (tool-bar-mode -1)
+   (menu-bar-mode -1)
+   (scroll-bar-mode -1)
+ #+end_src
+
 ** Environment
 
  #+begin_src emacs-lisp
@@ -1517,6 +1524,14 @@ Customizations for easier navigation between files and buffers
   (use-package nix-mode
     :mode "\\.nix\\'")
   #+end_src
+** Direnv
+  #+begin_src emacs-lisp
+    (use-package envrc
+      :config (envrc-global-mode))
+    ;; (use-package direnv
+    ;;   :config
+    ;;   (direnv-mode))
+  #+end_src
 ** Golang
 #+begin_src emacs-lisp
   ;; Set up before-save hooks to format buffer and add/delete imports.
@@ -1547,7 +1562,7 @@ Customizations for easier navigation between files and buffers
 #+begin_src emacs-lisp
   (use-package zig-mode
     :mode "\\.zig\\'"
-    :hook (zig-mode . lsp-deferred)
+    :hook (zig-mode . lsp)
     :config
     (setq zig-format-on-save t))
 #+end_src
